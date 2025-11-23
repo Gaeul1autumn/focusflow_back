@@ -46,12 +46,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // React(3000번 포트)와 통신하기 위한 CORS 설정
+    // React(5173번 포트)와 통신하기 위한 CORS 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트 주소 FIXME: 배포할 때 수정 필요
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // 프론트 주소 FIXME: 배포할 때 수정 필요
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // 쿠키(세션) 주고받기 허용 필수!
 

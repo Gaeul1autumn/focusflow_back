@@ -10,8 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,8 +46,20 @@ public class AuthController {
             // 세션 생성 (이미 있으면 가져오고 없으면 생성)
             HttpSession session = httpRequest.getSession(true);
             // 세션에 사용자 정보 저장 (보안을 위해 비밀번호는 제외하거나 필요한 정보만 저장)
+            // 2. ✨ [핵심 수정] 스프링 시큐리티에게 인증 정보 알려주기
+            // (권한이 필요하면 3번째 인자에 넣지만, 지금은 빈 리스트로 둠)
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authentication);
+            SecurityContextHolder.setContext(securityContext);
+
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+
             session.setAttribute("LOGIN_USER", user);
-            session.setMaxInactiveInterval(1800); // 30분 유지
+            session.setMaxInactiveInterval(21600); // 6시간 유지
 
             Map<String, Object> response = new HashMap<>();
             response.put("message", "로그인 성공");

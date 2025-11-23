@@ -14,13 +14,13 @@ public class DailyStatistic {
     private String id;
 
     private String userId;      // 누구의 기록인가
-    private LocalDate date;     // 날짜 (2025-11-23)
+    private String date;     // 날짜 (2025-11-23)
 
     private long totalFocusTime = 0; // 그날의 총 집중 시간
     private int focusSessions = 0;   // 그날의 총 세션 수
 
     // 생성자 편의 메서드
-    public DailyStatistic(String userId, LocalDate date) {
+    public DailyStatistic(String userId, String date) {
         this.userId = userId;
         this.date = date;
     }

@@ -13,5 +13,5 @@ public interface TaskRepository extends MongoRepository<Task, String> {
     List<Task> findByUserId(String userId);
 
     // (선택) 완료된 작업만 가져오기
-    List<Task> findByUserIdAndIsCompleted(String userId, boolean isCompleted);
+    List<Task> findByUserIdAndCompleted(String userId, boolean completed);
 }

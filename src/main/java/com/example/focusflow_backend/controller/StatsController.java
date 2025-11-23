@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +38,17 @@ public class StatsController {
     // ✨ [추가] 통계 조회 (오늘 + 최근 7일)
     @GetMapping("/{userId}")
     public ResponseEntity<Map<String, Object>> getStats(@PathVariable String userId) {
-        LocalDate today = LocalDate.now();
-        LocalDate oneWeekAgo = today.minusDays(6); // 오늘 포함 최근 7일
 
-        // 1. 오늘 기록
+        LocalDate adjustedNow = LocalDateTime.now().minusHours(4).toLocalDate();
+
+        String today = adjustedNow.toString();
+        String oneWeekAgo = adjustedNow.minusDays(6).toString(); // 기준일로부터 6일 전
+
+        // 1. "오늘"(사실은 새벽 4시 이전까지는 어제) 기록
         DailyStatistic todayStat = dailyStatisticRepository.findByUserIdAndDate(userId, today)
-                .orElse(new DailyStatistic(userId, today)); // 없으면 빈 객체(0초) 반환
+                .orElse(new DailyStatistic(userId, today));
 
-        // 2. 최근 7일 기록
+        // 2. 주간 기록
         List<DailyStatistic> weeklyStats = dailyStatisticRepository.findByUserIdAndDateBetweenOrderByDateAsc(userId, oneWeekAgo, today);
 
         Map<String, Object> response = new HashMap<>();
