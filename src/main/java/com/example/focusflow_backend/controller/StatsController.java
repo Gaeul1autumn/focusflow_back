@@ -42,7 +42,7 @@ public class StatsController {
         LocalDate adjustedNow = LocalDateTime.now().minusHours(4).toLocalDate();
 
         String today = adjustedNow.toString();
-        String oneWeekAgo = adjustedNow.minusDays(6).toString(); // 기준일로부터 6일 전
+        String oneWeekAgo = adjustedNow.minusDays(7).toString(); // 기준일로부터 7일 전
 
         // 1. "오늘"(사실은 새벽 4시 이전까지는 어제) 기록
         DailyStatistic todayStat = dailyStatisticRepository.findByUserIdAndDate(userId, today)
