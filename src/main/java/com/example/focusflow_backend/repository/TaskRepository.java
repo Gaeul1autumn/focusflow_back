@@ -3,6 +3,7 @@ package com.example.focusflow_backend.repository;
 import com.example.focusflow_backend.domain.Task;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public interface TaskRepository extends MongoRepository<Task, String> {
 
@@ -17,4 +18,7 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 
     // 특정 유저의 모든 할 일 삭제
     void deleteByUserId(String userId);
+
+    // 특정 시간 이전에 생성된 태스크 삭제
+    void deleteByUserIdAndCreatedAtBefore(String userId, LocalDateTime cutoffTime);
 }

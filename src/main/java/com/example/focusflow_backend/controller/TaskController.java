@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,29 @@ public class TaskController {
     // 3. 목록 조회 (새로고침 시 필요)
     @GetMapping("/{userId}")
     public ResponseEntity<List<Task>> getTasks(@PathVariable String userId) {
+
+        // 1. 기준 시간 계산 (가장 최근의 새벽 4시)
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime today4AM = now.toLocalDate().atTime(4, 0); // 오늘 새벽 4시
+
+        LocalDateTime cutoffTime;
+
+        if (now.isAfter(today4AM)) {
+            // 지금이 새벽 4시 넘었음 -> 오늘 새벽 4시 이전에 만든 건 (어제 만든 거니까) 삭제
+            cutoffTime = today4AM;
+        } else {
+            // 지금이 새벽 4시 전임 (예: 새벽 2시) -> 어제 새벽 4시 이전에 만든 거 삭제
+            cutoffTime = today4AM.minusDays(1);
+        }
+
+        // 2. 삭제 수행 (청소)
+        // "userId"의 데이터 중 "cutoffTime"보다 옛날에 만들어진 건 다 지워라!
+        taskRepository.deleteByUserIdAndCreatedAtBefore(userId, cutoffTime);
+
+        //System.out.println("🧹 [자동 청소] 기준 시간: " + cutoffTime + " 이전의 태스크 삭제 완료");
+
+
+        // 3. 청소된 깨끗한 목록 반환
         return ResponseEntity.ok(taskRepository.findByUserId(userId));
     }
 
