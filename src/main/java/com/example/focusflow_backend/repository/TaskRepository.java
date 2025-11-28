@@ -14,4 +14,7 @@ public interface TaskRepository extends MongoRepository<Task, String> {
 
     // (선택) 완료된 작업만 가져오기
     List<Task> findByUserIdAndCompleted(String userId, boolean completed);
+
+    // 특정 유저의 모든 할 일 삭제
+    void deleteByUserId(String userId);
 }

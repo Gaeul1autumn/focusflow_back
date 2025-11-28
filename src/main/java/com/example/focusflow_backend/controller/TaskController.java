@@ -55,4 +55,12 @@ public class TaskController {
         return ResponseEntity.ok(task); // 업데이트된 태스크 반환
     }
 
+    // 할 일 목록 수동 초기화
+    // DELETE /api/tasks/user/{userId}
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteAllTasksByUser(@PathVariable String userId) {
+        taskRepository.deleteByUserId(userId);
+        return ResponseEntity.ok("사용자의 모든 할 일이 초기화되었습니다.");
+    }
+
 }
