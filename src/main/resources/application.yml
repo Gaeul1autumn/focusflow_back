@@ -7,5 +7,4 @@ server:
   port: ${PORT:8080}
 
 
-
-# mongodb+srv://admin:WfWs9aoFky8N4Nky@focusflow.ujvk84u.mongodb.net/?appName=focusflow
+#이전 db 링크 변경
