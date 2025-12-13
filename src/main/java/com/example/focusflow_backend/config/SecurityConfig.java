@@ -50,7 +50,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // 프론트 주소 FIXME: 배포할 때 수정 필요
+        String frontUrl = System.getenv("FRONTEND_URL");
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                (frontUrl != null ? frontUrl : "") // 배포된 주소가 있으면 추가
+        ));
+//        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // 쿠키(세션) 주고받기 허용 필수!
