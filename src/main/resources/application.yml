@@ -5,6 +5,11 @@ spring:
 
 server:
   port: ${PORT:8080}
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
 
 
 #이전 db 링크 변경
